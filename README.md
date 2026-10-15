@@ -15,6 +15,8 @@ A React Native / Expo running tracker for iPhone, with separate running and cool
 
 Start with [Expo Go testing](docs/EXPO-GO.md), then use [free iPhone installation from Windows](docs/FREE-IOS-INSTALL.md). The [standard EAS installation guide](docs/EAS-IOS-INSTALL.md) is included if you prefer Apple's paid distribution route. Complete the [screen-lock acceptance test](docs/BACKGROUND-GPS.md) before relying on the recorder for workouts.
 
+The first unsigned iPhone Release build [completed successfully](https://github.com/cvkworld/MyRunTracker/actions/runs/38744381061). Download the IPA from [Releases](https://github.com/cvkworld/MyRunTracker/releases), then sign and install it with AltStore Classic. The built app requires iOS 16.4+. On iOS 26, first-time Windows setup normally needs a USB data cable; the installation guide also covers the conditional iOS 27/PAL route without a cable.
+
 ## Quick start on this Windows computer
 
 Use Node.js 24 LTS. The project currently targets Expo SDK 57 and React Native 0.86.3; dependency versions are locked in package-lock.json. Update your iPhone 13 and Expo Go to supported versions.
@@ -102,6 +104,6 @@ npx.cmd expo export --platform ios --output-dir build/ios-bundle
 
 The tests exercise calculations and real SQLite transactions through a Node SQLite adapter. Node may print an experimental SQLite warning. It is a test-runtime warning, unrelated to iOS SQLite.
 
-**Validation limit:** successful TypeScript checks, unit/database tests, config inspection and Metro export do not constitute a signed Xcode build or a physical iPhone GPS test. The supplied cloud workflow must run on macOS, and screen-locked recording must be verified on your iPhone using the included test. Force-quitting, rebooting, permission changes, storage exhaustion or OS termination can interrupt recording; saved points cannot reconstruct missing GPS positions.
+**Validation limit:** TypeScript checks, 15 unit/database tests, config inspection, Metro export and an unsigned native Xcode Release build have passed. The IPA was inspected for an ARM64 iPhone executable, bundled JavaScript and background location configuration. It has not been signed/installed or tested with a locked screen on a physical iPhone. Complete the included test on your device. Force-quitting, rebooting, permission changes, storage exhaustion or OS termination can interrupt recording; saved points cannot reconstruct missing GPS positions.
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for libraries, licenses and the three projects you found.

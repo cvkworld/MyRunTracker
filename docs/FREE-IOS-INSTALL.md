@@ -2,7 +2,9 @@
 
 For personal use, a free Apple account can sign apps with short-lived provisioning. AltStore Classic provides Windows signing and installation. Apps must be refreshed before their seven-day signing period expires; Apple also limits free-account sideloaded apps. See [Apple's free-account restrictions](https://developer.apple.com/help/account/basics/about-your-developer-account) and [AltStore's refresh explanation](https://faq.altstore.io/altstore-classic/your-altstore).
 
-The route here combines **an unsigned release build on a cloud Mac** with **free signing on your Windows computer**. It is an alternative to the standard EAS signed-device build. No Apple ID, password, signing key, Expo token, or paid membership is used by the included GitHub workflow. You authenticate locally with AltServer when installing. I have not run this workflow on your GitHub account or signed it for your phone.
+The route here combines **an unsigned release build on a cloud Mac** with **free personal signing through AltStore Classic**. It is an alternative to the standard EAS signed-device build. No Apple ID, password, signing key, Expo token, or paid membership is used by the included GitHub workflow. Authenticate only in AltStore/AltServer's own interface when installing. Building the IPA does not sign it for your phone.
+
+An initial native build completed successfully on October 15, 2026: [build and checks](https://github.com/cvkworld/MyRunTracker/actions/runs/38744381061). Its compiled source is commit `0376734dd5345b89d630ce51c06d27f0508c959f`. The downloaded IPA was checked for an ARM64 iPhone executable, bundled JavaScript, location background mode and permission descriptions. It requires iOS 16.4 or newer. Installation and screen-locked recording still need testing on a physical iPhone.
 
 Background modes and Data Protection are available to free Apple developer accounts. Recording a route does not require a paid Maps directions capability. [Apple capability table](https://developer.apple.com/help/account/reference/supported-capabilities-ios/)
 
@@ -28,9 +30,11 @@ The included `.github/workflows/ios-unsigned.yml` runs only when you manually re
 5. Wait for the build to finish. A cloud Mac still performs the native compilation; your Windows/Ubuntu machine does not run Xcode.
 6. Open the completed run and download the **MyRun-unsigned-iPhone** artifact. Extract its ZIP to obtain **MyRun-unsigned.ipa**. The artifact is retained for three days; save the IPA locally.
 
-Do not try to install the unsigned IPA directly from Safari. It needs signing in the next step. The included workflow is source, not a prebuilt or device-tested binary. If a future GitHub runner has an incompatible Xcode version, inspect its Xcode log and select an appropriate macOS image before rebuilding. No weekly rebuild is needed if the app source has not changed: refreshing the signing is separate from compiling.
+Do not try to install the unsigned IPA directly from Safari. It needs signing in the next step. If a future GitHub runner has an incompatible Xcode version, inspect its Xcode log and select an appropriate macOS image before rebuilding. No weekly rebuild is needed if the app source has not changed: refreshing the signing is separate from compiling.
 
-## 2. Install AltStore Classic from Windows
+## 2. Set up AltStore Classic
+
+### Windows setup, including iOS 26
 
 Follow [AltStore's current official Windows guide](https://faq.altstore.io/altstore-classic/how-to-install-altstore-windows). Use **AltStore Classic**, which supports importing your own IPA.
 
@@ -40,10 +44,24 @@ Follow [AltStore's current official Windows guide](https://faq.altstore.io/altst
 4. On iPhone, trust the developer profile under Settings → General → VPN & Device Management. Enable Developer Mode under Privacy & Security when required, including the restart/confirmation.
 5. Confirm AltStore opens successfully before continuing.
 
+The initial setup requires a USB data connection unless the phone has already been paired with this computer and is reachable through Wi-Fi sync. Codex being open on the iPhone does not provide that pairing or installation access. If you have no cable and no existing pairing, save the IPA and complete this step when a cable is available.
+
+### Cable-free option: iOS 27 and AltStore PAL eligibility
+
+AltStore's September 2026 announcement says that **iOS 27** supports setting up Remote AltServers entirely on the device; installing Classic through **AltStore PAL** can therefore avoid the computer and cable. This does not apply to iOS 26.6.2. See [AltStore's announcement](https://bsky.app/profile/altstore.io/post/3mviuyldlt22q) and the [Remote AltServers guide](https://faq.altstore.io/altstore-classic/remote-altservers).
+
+1. Check your iOS version and PAL eligibility before choosing this route. AltStore currently lists the EU, Japan and Brazil, with an eligible App Store account and physical presence in a supported region. [Download requirements](https://altstore.io/download), [Apple's regional requirements](https://support.apple.com/en-us/117767).
+2. On an eligible iPhone running iOS 27, open [AltStore's official download page](https://altstore.io/download) in Safari. Follow the marketplace installation prompts on the phone.
+3. In PAL, find and install the public **AltStore Classic** app from AltStore's own source. PAL itself does not import arbitrary IPA files. Avoid selecting a paid beta when a public release is available.
+4. Open Classic, go to Settings and choose **Set up Remote AltServer...**. Follow its iOS 27 on-device pairing instructions. Install LocalDevVPN when directed, and approve the device prompts yourself.
+5. Connect to Wi-Fi and LocalDevVPN for signing/installing/refreshing. Authenticate with your own free Apple account in Classic's interface, then continue below. A remote server is needed for this setup; check AltStore's documentation for its operation and privacy details.
+
+These are installation alternatives, not changes to MyRun's recording engine. If Classic requests a PC/USB connection or you are below iOS 27, use the Windows setup above. An OS update is optional; it is not required to run MyRun. The iPhone 13 is [compatible with iOS 27](https://support.apple.com/en-lamr/guide/iphone/iphe3fa5df43/27/ios/27).
+
 ## 3. Sign and install MyRun
 
 1. Transfer **MyRun-unsigned.ipa** to the iPhone's Files app, for example through iCloud Drive or your preferred file transfer.
-2. Keep AltServer running and reachable from the phone, on the same local network or through the supported USB connection.
+2. For Windows setup, keep AltServer running and reachable from the phone, on the same local network or through the supported USB connection. For a configured Remote AltServer, follow Classic's Wi-Fi/LocalDevVPN instructions instead.
 3. In AltStore Classic, open **My Apps**, tap **+**, and select the IPA in Files. Follow the signing prompts. There are no app extensions to reserve extra slots for.
 4. Launch MyRun from its Home Screen icon. This Release build contains its JavaScript bundle and requires neither Expo Go nor Metro nor a running computer during workouts.
 5. In MyRun, start an outdoor test and grant location access. Set Location to **Always**, and turn **Precise Location** on in iPhone Settings → Apps → MyRun → Location (the path varies by iOS version). An initial Allow Once choice can require manually changing Settings.
@@ -51,7 +69,7 @@ Follow [AltStore's current official Windows guide](https://faq.altstore.io/altst
 
 ## 4. Refresh before seven days
 
-Use AltStore's **Refresh All** while AltServer is reachable. Automatic refresh is available, but check the remaining days before a run; do not rely on automatic refresh always succeeding. AltStore itself uses one of the free sideloading slots. The free account allows three active sideloaded apps total, so this simple app fits alongside AltStore. [AltStore limitations](https://faq.altstore.io/altstore-classic/your-altstore)
+Use AltStore's **Refresh All** while the local or configured Remote AltServer is reachable. Automatic refresh is available, but check the remaining days before a run; do not rely on automatic refresh always succeeding. An AltServer-installed Classic uses one of the free sideloading slots. The free account allows three active sideloaded apps total, so this simple app fits alongside AltStore. [AltStore limitations](https://faq.altstore.io/altstore-classic/your-altstore)
 
 Refreshing normally updates signing without requiring deletion. Export your workouts before installation changes. If the app expires, refresh/re-sign it; avoid deleting the app as a first troubleshooting step because its local database is removed with it.
 
