@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "MyRun",
+    "slug": "myrun-tracker",
+    "version": "1.0.0",
+    "platforms": ["ios"],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.myrun.personaltracker",
+      "buildNumber": "1",
+      "infoPlist": { "UIBackgroundModes": ["location"], "ITSAppUsesNonExemptEncryption": false },
+      "entitlements": { "com.apple.developer.default-data-protection": "NSFileProtectionCompleteUntilFirstUserAuthentication" }
+    },
+    "plugins": [
+      ["expo-location", {
+        "locationWhenInUsePermission": "MyRun uses precise GPS to measure your run and draw your route.",
+        "locationAlwaysAndWhenInUsePermission": "MyRun records your workout route while your screen is locked. Location is used only during a workout.",
+        "isIosBackgroundLocationEnabled": true
+      }],
+      ["expo-splash-screen", { "image": "./assets/splash-icon.png", "imageWidth": 150, "backgroundColor": "#0B1210" }],
+      "expo-sqlite",
+      "expo-font"
+    ]
+  }
+}

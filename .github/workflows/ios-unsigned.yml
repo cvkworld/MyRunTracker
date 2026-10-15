@@ -1,0 +1,38 @@
+name: Build unsigned iPhone app
+
+# Manual only. No Apple credentials or paid Apple membership are used here.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    env:
+      EXPO_NO_TELEMETRY: '1'
+      CI: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Generate iOS native project
+        run: npx expo prebuild --platform ios --no-install
+      - name: Install native dependencies
+        working-directory: ios
+        run: pod install
+      - name: Build a device app without code signing
+        run: bash scripts/build-unsigned-ios.sh
+      - name: Upload the unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: MyRun-unsigned-iPhone
+          path: build/MyRun-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 3

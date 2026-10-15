@@ -1,0 +1,15 @@
+node_modules/
+.expo/
+dist/
+ios/
+android/
+*.tgz
+*.zip
+.cache/
+build/
+coverage/
+credentials.json
+*.p12
+*.mobileprovision
+.env*
+.DS_Store
